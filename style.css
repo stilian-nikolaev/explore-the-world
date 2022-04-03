@@ -1,0 +1,24 @@
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.location-window {
+  display: none;
+  position: fixed;
+  background-color: black;
+  opacity: 0.7;
+  z-index: 1;
+  padding: 10px 16px 10px 16px;
+  border-radius: 8px;
+}
+.location-window p, h2 {
+  color: white;
+  margin: 0;
+}
+
+.location-text {
+  font-size: 22px;
+}
+
