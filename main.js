@@ -2,6 +2,7 @@ import './style.css'
 import * as THREE from 'three';
 import THREEx from './helpers/threex.domevents';
 import gsap from 'gsap';
+import { countries } from './countries';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
@@ -53,45 +54,11 @@ const group = new THREE.Group();
 group.add(sphere);
 scene.add(group)
 
-let sphereRotation = 0.005;
-let cloudsRotation = 0.004;
+console.log(countries);
 
-createPoint({
-    lat: 23.6345,
-    lon: -102.5528,
-    country: 'Australia',
-    area: 354
-})
-createPoint({
-    lat: 42.698334,
-    lon: 23.319941,
-    country: 'Mexico',
-    area: 555
-})
-createPoint({
-    lat: -14.2350,
-    lon: -51.9253,
-    country: 'Italy',
-    area: 111
-})
-createPoint({
-    lat: 25.286106,
-    lon: 51.534817,
-    country: 'Denmark',
-    area: 454
-})
-createPoint({
-    lat: 28.0339,
-    lon: 1.6596,
-    country: 'Bulgaria',
-    area: 154
-})
-createPoint({
-    lat: -33.865143,
-    lon: 151.209900,
-    country: 'India',
-    area: 251
-})
+//create points
+countries.forEach(createPoint);
+
 
 
 //starting position of the sphere on load
@@ -105,12 +72,13 @@ const mouse = {
     y: null,
 }
 
-const infoPopupElement = document.querySelector('#info-popup');
-const countryElement = document.querySelector('#country');
-const areaElement = document.querySelector('#area');
+
+//remove later from here
+
+let sphereRotation = 0.005;
+let cloudsRotation = 0.004;
 
 //add dom events 
-
 const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
 domEvents.addEventListener(sphere, 'mouseover', event => {
     sphereRotation = 0.002;
@@ -121,6 +89,15 @@ domEvents.addEventListener(sphere, 'mouseout', () => {
     sphereRotation = 0.005;
     cloudsRotation = 0.004;
 })
+
+//to here
+
+
+const infoPopupElement = document.querySelector('#info-popup');
+const countryElement = document.querySelector('#country');
+const areaElement = document.querySelector('#area');
+
+const pointsGroup = group.children.filter((x, i) => i !== 0);
 
 function animate() {
     requestAnimationFrame(animate);
@@ -133,9 +110,7 @@ function animate() {
     raycaster.setFromCamera(mouse, camera);
 
     // calculate objects intersecting the picking ray
-    const intersects = raycaster.intersectObjects(group.children.filter((x, i) => {
-        return i !== 0;
-    }))
+    const intersects = raycaster.intersectObjects(pointsGroup);
 
     //change opacity of intersects back to original 0.4
     for (let i = 1; i < group.children.length; i++) {
@@ -183,8 +158,20 @@ window.addEventListener('mousemove', e => {
     })
 })
 
-function createPoint({ lat, lon, country, area }) {
-    const pointGeometry = new THREE.SphereGeometry(0.15, 32, 32);
+function createPoint({ latitude, longitude, country, area }) {
+    const scale = area / 800;
+    const pointHeight = 1 * scale;
+    const minHeight = 0.8;
+
+    const size = 0.4 * scale;
+    const minSize = 0.1;
+    console.log(size);
+
+    //using Math max to create minimum height
+    const pointGeometry = new THREE.BoxGeometry(
+        Math.max(size, minSize),
+        Math.max(size, minSize),
+        Math.max(pointHeight, minHeight));
     const pointMaterial = new THREE.MeshBasicMaterial({
         color: '#00ffff',
         transparent: true,
@@ -193,19 +180,34 @@ function createPoint({ lat, lon, country, area }) {
 
     const point = new THREE.Mesh(pointGeometry, pointMaterial);
 
-    const latitude = (lat / 180) * Math.PI;
-    const longtitude = (lon / 180) * Math.PI;
+    const lat = (latitude / 180) * Math.PI;
+    const lon = (longitude / 180) * Math.PI;
 
-    const x = sphereRadius * Math.cos(latitude) * Math.sin(longtitude);
-    const y = sphereRadius * Math.sin(latitude);
-    const z = sphereRadius * Math.cos(latitude) * Math.cos(longtitude);
+    const x = sphereRadius * Math.cos(lat) * Math.sin(lon);
+    const y = sphereRadius * Math.sin(lat);
+    const z = sphereRadius * Math.cos(lat) * Math.cos(lon);
 
     point.position.setX(x);
     point.position.setY(y);
     point.position.setZ(z);
 
+    //direction the prisms to the center
+    point.lookAt(0, 0, 0);
+
+    //get points out of the inside of the sphere
+    point.geometry.applyMatrix4(new THREE.Matrix4().makeTranslation(0, 0, -pointHeight / 2))
+
     point.country = country;
     point.area = area;
 
     group.add(point);
+
+    gsap.to(point.scale, {
+        z: Math.max(pointHeight, minHeight) / 1.25,
+        duration: 2,
+        yoyo: true,
+        repeat: -1,
+        ease: 'linear',
+        delay: Math.random(),
+    })
 }
