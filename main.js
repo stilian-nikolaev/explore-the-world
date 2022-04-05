@@ -6,8 +6,9 @@ import { countries } from './countries';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+const canvasElement = document.getElementById('bg');
 
-const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg'), antialias: true });
+const renderer = new THREE.WebGLRenderer({ canvas: canvasElement, antialias: true });
 
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -54,15 +55,18 @@ const group = new THREE.Group();
 group.add(sphere);
 scene.add(group)
 
-console.log(countries);
 
 //create points
 countries.forEach(createPoint);
 
 
-
 //starting position of the sphere on load
 sphere.rotation.y = -Math.PI / 2;
+
+group.rotation.offset = {
+    x: 0,
+    y: 0,
+}
 
 //used for determining if the user hovers over a point
 const raycaster = new THREE.Raycaster();
@@ -70,6 +74,9 @@ const raycaster = new THREE.Raycaster();
 const mouse = {
     x: null,
     y: null,
+    down: false,
+    xPrev: null,
+    yPrev: null,
 }
 
 
@@ -78,17 +85,17 @@ const mouse = {
 let sphereRotation = 0.005;
 let cloudsRotation = 0.004;
 
-//add dom events 
-const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
-domEvents.addEventListener(sphere, 'mouseover', event => {
-    sphereRotation = 0.002;
-    cloudsRotation = 0.0016;
-})
+// //add dom events 
+// const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
+// domEvents.addEventListener(sphere, 'mouseover', event => {
+//     sphereRotation = 0.002;
+//     cloudsRotation = 0.0016;
+// })
 
-domEvents.addEventListener(sphere, 'mouseout', () => {
-    sphereRotation = 0.005;
-    cloudsRotation = 0.004;
-})
+// domEvents.addEventListener(sphere, 'mouseout', () => {
+//     sphereRotation = 0.005;
+//     cloudsRotation = 0.004;
+// })
 
 //to here
 
@@ -103,8 +110,8 @@ function animate() {
     requestAnimationFrame(animate);
 
     //rotate globe
-    group.rotation.y += sphereRotation;
-    clouds.rotation.y += cloudsRotation;
+    // group.rotation.y += sphereRotation;
+    // clouds.rotation.y += cloudsRotation;
 
     // update the picking ray with the camera and pointer position
     raycaster.setFromCamera(mouse, camera);
@@ -156,6 +163,35 @@ window.addEventListener('mousemove', e => {
         x: e.clientX,
         y: e.clientY,
     })
+
+    if (mouse.down) {
+        e.preventDefault();
+
+        const deltaX = e.clientX - mouse.xPrev;
+        const deltaY = e.clientY - mouse.yPrev;
+
+        group.rotation.offset.y += deltaX * 0.002;
+        group.rotation.offset.x += deltaY * 0.002;
+
+        gsap.to(group.rotation, {
+            x: group.rotation.offset.x,
+            y: group.rotation.offset.y,
+            duration: 1.2,
+        })
+
+        mouse.xPrev = e.clientX;
+        mouse.yPrev = e.clientY;
+    }
+})
+
+canvasElement.addEventListener('mousedown', e => {
+    mouse.down = true;
+    mouse.xPrev = e.clientX;
+    mouse.yPrev = e.clientY;
+})
+
+window.addEventListener('mouseup', () => {
+    mouse.down = false;
 })
 
 function createPoint({ latitude, longitude, country, area }) {
@@ -165,7 +201,6 @@ function createPoint({ latitude, longitude, country, area }) {
 
     const size = 0.4 * scale;
     const minSize = 0.1;
-    console.log(size);
 
     //using Math max to create minimum height
     const pointGeometry = new THREE.BoxGeometry(
