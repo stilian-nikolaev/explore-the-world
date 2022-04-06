@@ -8,17 +8,36 @@ canvas {
   display: none;
   position: fixed;
   background-color: black;
+  color: white;
   opacity: 0.7;
   z-index: 1;
   padding: 10px 16px 10px 16px;
   border-radius: 8px;
 }
 .location-window p, h2 {
-  color: white;
   margin: 0;
 }
 
 .location-text {
   font-size: 22px;
+}
+
+.more-info {
+  display: none;
+  width: 15vw;
+  position: fixed;
+  top: 15vh;
+  right: 10vw;
+  background-color: #EEEEEE;
+  opacity: 0.7;
+  z-index: 1;
+  padding: 10px 16px 10px 16px;
+  border: 2px solid black;
+  border-radius: 8px;
+  box-shadow:
+    0 0 30px 15px #fff,  /* inner white */
+    0 0 50px 30px #f0f, /* middle magenta */
+    0 0 70px 45px #0ff; /* outer cyan */
+  color: black;
 }
 
