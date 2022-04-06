@@ -103,7 +103,6 @@ let cloudsRotation = 0.004;
 
 const popupElement = document.querySelector('#popup');
 const popupCountryElement = document.querySelector('#popup-country');
-const popupPopulationElement = document.querySelector('#popup-population');
 
 const moreInfoElement = document.querySelector('#more-info');
 const infoCountryElement = document.querySelector('#info-country');
@@ -153,6 +152,14 @@ function animate() {
         if (!mouse.busyRotating) {
 
             if (mouse.down) {
+                const deltaX = group.rotation.offset.y * sphereRadius - intersects[i].object.position.x;
+                // group.rotation.offset.y += 0.1;
+                console.log(deltaX);
+                // gsap.to(group.rotation, {
+                //     y: group.rotation.offset.y,
+                //     duration: 1.2
+                // })
+
                 //show more info
                 gsap.set(moreInfoElement, {
                     display: 'block'
@@ -227,7 +234,6 @@ window.addEventListener('mousemove', e => {
 
         const deltaX = e.clientX - mouse.xPrev;
         const deltaY = e.clientY - mouse.yPrev;
-        mouse.deltaX = deltaX;
 
         group.rotation.offset.y += deltaX * 0.002;
         group.rotation.offset.x += deltaY * 0.002;
