@@ -24,9 +24,10 @@ canvas {
 
 .more-info {
   display: none;
+  font-size: 1.2vw;
   width: 15vw;
   position: fixed;
-  top: 15vh;
+  top: 30vh;
   right: 10vw;
   background-color: #EEEEEE;
   opacity: 0.7;
@@ -36,8 +37,8 @@ canvas {
   border-radius: 8px;
   box-shadow:
     0 0 30px 15px #fff,  /* inner white */
-    0 0 50px 30px #f0f, /* middle magenta */
-    0 0 70px 45px #0ff; /* outer cyan */
+    0 0 50px 30px rgb(129, 129, 129), /* middle magenta */
+    0 0 70px 45px rgb(72, 72, 72); /* outer cyan */
   color: black;
 }
 

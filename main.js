@@ -68,8 +68,7 @@ group.rotation.offset = {
     y: 0,
 }
 
-//used for determining if the user hovers over a point
-const raycaster = new THREE.Raycaster();
+
 
 const mouse = {
     x: null,
@@ -115,12 +114,12 @@ const infoCurrencyElement = document.querySelector('#info-currency');
 
 const pointsGroup = group.children.filter((x, i) => i !== 0);
 
+//used for determining if the user hovers over a point
+const raycaster = new THREE.Raycaster();
+
 function animate() {
     requestAnimationFrame(animate);
 
-    //rotate globe
-    // group.rotation.y += sphereRotation;
-    // clouds.rotation.y += cloudsRotation;
 
     // update the picking ray with the camera and pointer position
     raycaster.setFromCamera(mouse, camera);
@@ -139,6 +138,11 @@ function animate() {
         gsap.set(moreInfoElement, {
             display: 'none'
         })
+
+        // gsap.to(camera.position, {
+        //     z: 15,
+        //     duration: 2
+        // })
     }
 
     //hide the info element
@@ -152,9 +156,13 @@ function animate() {
         if (!mouse.busyRotating) {
 
             if (mouse.down) {
-                const deltaX = group.rotation.offset.y * sphereRadius - intersects[i].object.position.x;
+
                 // group.rotation.offset.y += 0.1;
-                console.log(deltaX);
+                // gsap.to(camera.position, {
+                //     z: 10,
+                //     duration: 2
+                // })
+                
                 // gsap.to(group.rotation, {
                 //     y: group.rotation.offset.y,
                 //     duration: 1.2
@@ -306,12 +314,12 @@ function createPoint(country) {
     point.geometry.applyMatrix4(new THREE.Matrix4().makeTranslation(0, 0, -height / 2))
 
     const capital = country.capital ? country.capital[0] : 'n/a';
-    const continent= country.continents.join('/');
-    const density= `${(population / country.area).toFixed()}/km²`;
+    const continent = country.continents.join('/');
+    const density = `${(population / country.area).toFixed()}/km²`;
     population = population.toLocaleString();
-    const area= `${country.area.toFixed()} km²`;
-    const currencyObj = Object.values(country.currencies|| {})[0];
-    const currency= `${currencyObj?.name} ${currencyObj?.symbol? `[${currencyObj.symbol}]`: ''}`;
+    const area = `${country.area.toFixed()} km²`;
+    const currencyObj = Object.values(country.currencies || {})[0];
+    const currency = `${currencyObj?.name} ${currencyObj?.symbol ? `[${currencyObj.symbol}]` : ''}`;
 
     point.data = {
         country: country.name.common,
