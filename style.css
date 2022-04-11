@@ -1,7 +1,31 @@
+body {
+  font-family: 'Lato',
+  sans-serif;
+}
+
 canvas {
   position: fixed;
   top: 0;
   left: 0;
+}
+
+
+.heading-container {
+  left: 5vw;
+  top: 30vh;
+  width: 25vw;
+  color: white;
+  position: fixed;
+  z-index: 1;
+}
+
+.heading {
+  font-size: 3vw;
+}
+
+.subheading {
+  color: grey;
+  font-size: 1.1vw;
 }
 
 .location-window {
@@ -11,8 +35,8 @@ canvas {
   color: white;
   opacity: 0.7;
   z-index: 1;
-  padding: 10px 16px 10px 16px;
-  border-radius: 8px;
+  padding: 1vh 0.8vw 1vh 0.8vw;
+  border-radius: 1vh;
 }
 .location-window p, h2 {
   margin: 0;
@@ -29,16 +53,19 @@ canvas {
   position: fixed;
   top: 30vh;
   right: 10vw;
-  background-color: #EEEEEE;
   opacity: 0.7;
   z-index: 1;
   padding: 10px 16px 10px 16px;
-  border: 2px solid black;
   border-radius: 8px;
-  box-shadow:
-    0 0 30px 15px #fff,  /* inner white */
-    0 0 50px 30px rgb(129, 129, 129), /* middle magenta */
-    0 0 70px 45px rgb(72, 72, 72); /* outer cyan */
-  color: black;
+  color: white;
 }
 
+.info-country {
+  font-size: 1.8vw;
+}
+
+.info-country-container {
+  border-bottom: 2px solid white;
+  padding: 0 3vh 1vh 1vh;
+  display: inline-block;
+}

@@ -3,16 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&family=Lato&display=swap" rel="stylesheet">
     <script type="module" src="/main.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
   </head>
-  <body>
+  <body> 
+    <div class="heading-container">
+      <h1 class="heading">Explore the world with javascript</h1>
+      <h2 class="subheading">Click and drag to move around the globe. Discover countries by hovering over them or clicking them</h2>
+    </div>
     <div id="popup" class="location-window">
       <h2 id="popup-country" class="location-heading"></h2>
     </div>
     <div id="more-info" class="more-info">
-      <h2 id="info-country"></h2>
+      <div class="info-country-container">
+        <span class="info-country" id="info-country"></span>
+      </div>
       <p id="info-capital"></p>
       <p id="info-continent"></p>
       <p id="info-population"></p>
