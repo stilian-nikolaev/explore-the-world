@@ -1,6 +1,5 @@
 import './style.css'
 import * as THREE from 'three';
-import THREEx from './helpers/threex.domevents';
 import gsap from 'gsap';
 import countries from './countries';
 
@@ -23,8 +22,6 @@ directionLight.target.position.set(0, 0, 0);
 
 scene.add(directionLight, ambientLight)
 
-const lightHelper = new THREE.DirectionalLightHelper(directionLight);
-
 
 //create sphere
 const sphereRadius = 6;
@@ -36,21 +33,11 @@ const material = new THREE.MeshStandardMaterial({
 
 const sphere = new THREE.Mesh(geometry, material);
 
-
-//create clouds
-const cloudsGeometry = new THREE.SphereGeometry(sphereRadius + 0.1, 32, 32);
-const cloudsTexture = new THREE.TextureLoader().load('./images/earthCloud.png')
-const cloudsMaterial = new THREE.MeshStandardMaterial({
-    map: cloudsTexture,
-    transparent: true,
-});
-
-const clouds = new THREE.Mesh(cloudsGeometry, cloudsMaterial);
-
-// scene.add(clouds);
+//starting position of the sphere on load
+sphere.rotation.y = -Math.PI / 2;
 
 
-//group sphere and clouds 
+//group for sphere and points
 const group = new THREE.Group();
 group.add(sphere);
 scene.add(group)
@@ -59,16 +46,10 @@ scene.add(group)
 //create points
 countries.forEach(createPoint);
 
-
-//starting position of the sphere on load
-sphere.rotation.y = -Math.PI / 2;
-
 group.rotation.offset = {
     x: 0,
     y: 0,
 }
-
-
 
 const mouse = {
     x: null,
@@ -80,28 +61,7 @@ const mouse = {
 }
 
 
-//remove later from here
 
-let sphereRotation = 0.005;
-let cloudsRotation = 0.004;
-
-// //add dom events 
-// const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
-// domEvents.addEventListener(sphere, 'mouseover', event => {
-//     sphereRotation = 0.002;
-//     cloudsRotation = 0.0016;
-// })
-
-// domEvents.addEventListener(sphere, 'mouseout', () => {
-//     sphereRotation = 0.005;
-//     cloudsRotation = 0.004;
-// })
-
-//to here
-
-
-const popupElement = document.querySelector('#popup');
-const popupCountryElement = document.querySelector('#popup-country');
 
 const moreInfoElement = document.querySelector('#more-info');
 const infoCountryElement = document.querySelector('#info-country');
@@ -112,6 +72,9 @@ const infoAreaElement = document.querySelector('#info-area');
 const infoDensityElement = document.querySelector('#info-density');
 const infoCurrencyElement = document.querySelector('#info-currency');
 
+const popupElement = document.querySelector('#popup');
+
+
 const pointsGroup = group.children.filter((x, i) => i !== 0);
 
 //used for determining if the user hovers over a point
@@ -120,122 +83,86 @@ const raycaster = new THREE.Raycaster();
 function animate() {
     requestAnimationFrame(animate);
 
+    resetValues();
 
     // update the picking ray with the camera and pointer position
     raycaster.setFromCamera(mouse, camera);
 
     // calculate objects intersecting the picking ray
+    //a.k.a objects hovered by the mouse
     const intersects = raycaster.intersectObjects(pointsGroup);
 
-    //change opacity of intersects back to original 0.4
-    for (let i = 1; i < group.children.length; i++) {
-        group.children[i].material.opacity = 0.4;
-    }
-
-    document.body.style.cursor = 'default';
-
-    if (mouse.busyRotating) {
-        gsap.set(moreInfoElement, {
-            display: 'none'
-        })
-
-        // gsap.to(camera.position, {
-        //     z: 15,
-        //     duration: 2
-        // })
-    }
-
-    //hide the info element
-    gsap.set(popupElement, {
-        display: 'none'
-    })
 
     //loop over intersects with mouse
     for (let i = 0; i < intersects.length; i++) {
-
+        //this if statement is to avoid highlighting points while rotating the globe
         if (!mouse.busyRotating) {
 
             if (mouse.down) {
-
-                // group.rotation.offset.y += 0.1;
-                // gsap.to(camera.position, {
-                //     z: 10,
-                //     duration: 2
-                // })
-                
-                // gsap.to(group.rotation, {
-                //     y: group.rotation.offset.y,
-                //     duration: 1.2
-                // })
-
-                //show more info
-                gsap.set(moreInfoElement, {
-                    display: 'block'
-                })
-
-                gsap.set(infoCountryElement, {
-                    innerHTML: intersects[i].object.data.country
-                })
-
-                gsap.set(infoCapitalElement, {
-                    innerHTML: `Capital: ${intersects[i].object.data.capital}`
-                })
-
-                gsap.set(infoContinentElement, {
-                    innerHTML: `Continent: ${intersects[i].object.data.continent}`
-                })
-
-                gsap.set(infoPopulationElement, {
-                    innerHTML: `Population: ${intersects[i].object.data.population}`
-                })
-
-                gsap.set(infoAreaElement, {
-                    innerHTML: `Area: ${intersects[i].object.data.area}`
-                })
-
-                gsap.set(infoDensityElement, {
-                    innerHTML: `Density: ${intersects[i].object.data.density}`
-                })
-
-                gsap.set(infoCurrencyElement, {
-                    innerHTML: `Currency: ${intersects[i].object.data.currency}`
-                })
+                showMoreInfo(intersects[i].object.data);
             }
 
-            document.body.style.cursor = 'pointer';
-
-            //spotlight intersects
-            intersects[i].object.material.opacity = 1;
-
-            //setup info window
-            gsap.set(popupCountryElement, {
-                innerHTML: `${intersects[i].object.data.country}`
-            })
-
-            //show info window
-            gsap.set(popupElement, {
-                display: 'block'
-            })
+            highlightPoint(intersects[i].object);
         }
     }
 
     renderer.render(scene, camera);
 }
 animate();
+function resetValues() {
+    document.body.style.cursor = 'default';
 
-//change our custom mouse object's coordinates
+    //change opacity of intersects back to original 0.4
+    for (let i = 1; i < group.children.length; i++) {
+        group.children[i].material.opacity = 0.4;
+    }
+
+    if (mouse.busyRotating) {
+        moreInfoElement.style.display = 'none';
+    }
+
+    popupElement.style.display = 'none';
+}
+
+function highlightPoint(point) {
+    const countryBannerElement = document.querySelector('#popup-country');
+
+    document.body.style.cursor = 'pointer'
+
+    point.material.opacity = 1;
+
+    //setup info window
+    countryBannerElement.innerHTML = `${point.data.country}`;
+
+    popupElement.style.display = 'block';
+}
+
+function showMoreInfo(pointData) {
+    infoCountryElement.innerHTML = pointData.country;
+    infoCapitalElement.innerHTML = pointData.capital ? `Capital: ${pointData.capital}` : '';
+    infoContinentElement.innerHTML = `Continent: ${pointData.continent}`;
+    infoPopulationElement.innerHTML = `Population: ${pointData.population}`;
+    infoAreaElement.innerHTML = `Area: ${pointData.area}`;
+    infoDensityElement.innerHTML = `Density: ${pointData.density}`;
+    infoCurrencyElement.innerHTML = `Currency: ${pointData.currency}`;
+
+    moreInfoElement.style.display = 'block';
+}
+
 window.addEventListener('mousemove', e => {
     //change coordinates
     mouse.x = (e.clientX / innerWidth) * 2 - 1;
     mouse.y = -(e.clientY / innerHeight) * 2 + 1;
 
-    //move info window
+    //move popup window
     gsap.set(popupElement, {
         x: e.clientX,
         y: e.clientY,
     })
 
     if (mouse.down) {
+        //logic for rotating the globe by dragging
+
         e.preventDefault();
 
         mouse.busyRotating = true;
@@ -271,7 +198,9 @@ window.addEventListener('mouseup', () => {
 function createPoint(country) {
     let population = country.population;
 
+    //sizes of the prism
     const scale = 0.000000002 * population;
+
     const minHeight = 0.7;
     const maxHeight = 1;
     const height = Math.min(Math.max(1 * scale, minHeight), maxHeight);
@@ -280,22 +209,18 @@ function createPoint(country) {
     const maxSize = 0.4;
     const size = Math.min(Math.max(0.4 * scale, minSize), maxSize);
 
-    const pointGeometry = new THREE.BoxGeometry(
-        size,
-        size,
-        height
-    );
+    const pointGeometry = new THREE.BoxGeometry(size, size, height);
     const pointMaterial = new THREE.MeshBasicMaterial({
         color: '#00ffff',
         transparent: true,
         opacity: 0.4,
     });
-
     const point = new THREE.Mesh(pointGeometry, pointMaterial);
 
     const lat = country.latlng[0];
     const lng = country.latlng[1];
 
+    //translating latitude and longtitude from degrees to sphere coordinates
     const latitude = (lat / 180) * Math.PI;
     const longtitude = (lng / 180) * Math.PI;
 
@@ -313,11 +238,12 @@ function createPoint(country) {
     //get points out of the inside of the sphere
     point.geometry.applyMatrix4(new THREE.Matrix4().makeTranslation(0, 0, -height / 2))
 
-    const capital = country.capital ? country.capital[0] : 'n/a';
+    //process data from country object
+    const capital = country.capital ? country.capital[0] : null;
     const continent = country.continents.join('/');
     const density = `${(population / country.area).toFixed()}/km²`;
     population = population.toLocaleString();
-    const area = `${country.area.toFixed()} km²`;
+    const area = `${country.area.toLocaleString()} km²`;
     const currencyObj = Object.values(country.currencies || {})[0];
     const currency = `${currencyObj?.name} ${currencyObj?.symbol ? `[${currencyObj.symbol}]` : ''}`;
 
@@ -331,8 +257,7 @@ function createPoint(country) {
         currency
     }
 
-    group.add(point);
-
+    //add animation to the prism (going up and down)
     gsap.to(point.scale, {
         z: height * 1.2,
         duration: 2,
@@ -341,4 +266,6 @@ function createPoint(country) {
         ease: 'linear',
         delay: Math.random(),
     })
+
+    group.add(point);
 }
