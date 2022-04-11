@@ -47,7 +47,8 @@ function showMoreInfo(pointData) {
     infoPopulationElement.innerHTML = `Population: ${pointData.population}`;
     infoAreaElement.innerHTML = `Area: ${pointData.area}`;
     infoDensityElement.innerHTML = `Density: ${pointData.density}`;
-    infoCurrencyElement.innerHTML = `Currency: ${pointData.currency}`;
+    infoCurrencyElement.innerHTML = pointData.currency.includes('undefined') ? '' :
+        `Currency: ${pointData.currency}`;
 
     moreInfoElement.style.display = 'block';
 }
@@ -70,7 +71,7 @@ export function animate() {
 
     //loop over intersects with mouse
     for (let i = 0; i < intersects.length; i++) {
-        
+
         //avoid clicking on the back of the globe
         if (intersects[i].distance > 16.5) {
             break;
