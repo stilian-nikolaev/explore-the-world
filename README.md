@@ -3,7 +3,7 @@
 
 ## Project Description
 
-Explore data about countries all around the world with a responsive 3D earth model. The 3D globe represents the exact map of the earth by using a satellite image. It can be rotated around by clicking and dragging. Data about the countries is extracted from a third party API. Every country is displayed on the globe with a transparent prism and it's size and thickness is representing the country's population. By hovering over a prism/country a banner appears and shows the corresponding country. By clicking on the prism another window appears aside displaying more detailed information about the country such as it's capital, population, density, currency and which continent it is located in.
+Explore data about countries all around the world with a responsive 3D earth model. The 3D globe represents the exact map of the earth by using a satellite image and it can be rotated around by clicking and dragging. Data about the countries is extracted from a third party API. Every country is displayed on the globe with a transparent prism and it's size and thickness is representing the country's population. By hovering over a prism/country a banner appears and shows the corresponding country. By clicking on the prism another window appears aside displaying more detailed information about the country such as it's capital, population, density, currency and which continent it is located in.
 
 ## Tech stack:
 
