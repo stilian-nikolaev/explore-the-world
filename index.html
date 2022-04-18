@@ -2,23 +2,23 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&family=Lato&display=swap" rel="stylesheet">
-    <script type="module" src="/main.js"></script>
+    <script type="module" src="scripts/main.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+    <title>Explore the world</title>
   </head>
   <body> 
     <div class="heading-container">
       <h1 class="heading">Explore the world with javascript</h1>
-      <h2 class="subheading">Click and drag to move around the globe. Discover countries by hovering over them or clicking them</h2>
+      <h2 class="subheading">Click and drag rotate the globe. Discover countries by hovering over or clicking them.</h2>
     </div>
-    <div id="popup" class="location-window">
-      <h2 id="popup-country" class="location-heading"></h2>
+    <div id="popup" class="popup">
+      <h2 id="popup-country"></h2>
     </div>
-    <div id="more-info" class="more-info">
+    <div id="more-info" class="info">
       <div class="info-country-container">
         <span class="info-country" id="info-country"></span>
       </div>

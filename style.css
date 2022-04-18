@@ -9,18 +9,18 @@ canvas {
   left: 0;
 }
 
-
 .heading-container {
   left: 5vw;
   top: 30vh;
   width: 25vw;
-  color: white;
   position: fixed;
   z-index: 1;
 }
 
 .heading {
   font-size: 3vw;
+  margin-bottom: 2vh;
+  color: white;
 }
 
 .subheading {
@@ -28,7 +28,7 @@ canvas {
   font-size: 1.1vw;
 }
 
-.location-window {
+.popup {
   display: none;
   position: fixed;
   background-color: black;
@@ -38,25 +38,19 @@ canvas {
   padding: 1vh 0.8vw 1vh 0.8vw;
   border-radius: 1vh;
 }
-.location-window p, h2 {
+
+.popup p, h2 {
   margin: 0;
 }
 
-.location-text {
-  font-size: 22px;
-}
-
-.more-info {
+.info {
   display: none;
   font-size: 1.2vw;
   width: 15vw;
   position: fixed;
   top: 30vh;
   right: 10vw;
-  opacity: 0.7;
   z-index: 1;
-  padding: 10px 16px 10px 16px;
-  border-radius: 8px;
   color: white;
 }
 

@@ -1,10 +1,11 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
-import countries from '../countries.json'
+import countries from './countries.json'
 
 function createPoint(country, group) {
     let population = country.population;
 
+    //scale based on population of the country
     const scale = 0.000000002 * population;
 
     //sizes of the prism
@@ -31,7 +32,7 @@ function createPoint(country, group) {
     const latitude = (lat / 180) * Math.PI;
     const longtitude = (lng / 180) * Math.PI;
 
-
+    //calculating xyz
     const x = 6 * Math.cos(latitude) * Math.sin(longtitude);
     const y = 6 * Math.sin(latitude);
     const z = 6 * Math.cos(latitude) * Math.cos(longtitude);

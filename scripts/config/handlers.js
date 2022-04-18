@@ -46,7 +46,7 @@ function onMouseDown(e) {
     mouse.yPrev = e.clientY;
 }
 
-function onMouseUp(e) {
+function onMouseUp() {
     mouse.down = false;
     mouse.busyRotating = false;
 }

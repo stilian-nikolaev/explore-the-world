@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
-import { scene, group, camera, renderer } from './scene';
-import { mouse } from './mouse';
+import { scene, group, camera, renderer } from './config/scene';
+import { mouse } from './config/mouse';
 
 const popupElement = document.querySelector('#popup');
 const countryBannerElement = document.querySelector('#popup-country');
@@ -69,7 +69,7 @@ export function animate() {
     //a.k.a objects hovered by the mouse
     const intersects = raycaster.intersectObjects(pointsGroup);
 
-    //loop over intersects with mouse
+    //loop over intersects array
     for (let i = 0; i < intersects.length; i++) {
 
         //avoid clicking on the back of the globe

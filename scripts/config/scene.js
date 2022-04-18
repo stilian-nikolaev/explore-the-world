@@ -12,11 +12,11 @@ const scene = new THREE.Scene();
 
 //create group for the globe and all the points
 const group = createGroup();
-addLight();
+createLight();
 createSphere(group);
 attachPoints(group);
 
-function addLight() {
+function createLight() {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.25)
 
     const directionLight = new THREE.DirectionalLight(0xffffff, 1)
@@ -41,6 +41,7 @@ function createSphere(group) {
 
 function createGroup() {
     const group = new THREE.Group();
+    
     group.rotation.offset = {
         x: 0,
         y: 0,
