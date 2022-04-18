@@ -5,13 +5,13 @@
 
 Explore data about countries all around the world with a responsive 3D earth model. The 3D globe represents the exact map of the earth by using a satellite image and it can be rotated around by clicking and dragging. Data about the countries is extracted from a third party API. Every country is displayed on the globe with a transparent prism and it's size and thickness is representing the country's population. By hovering over a prism/country a banner appears and shows the corresponding country. By clicking on the prism another window appears aside displaying more detailed information about the country such as it's capital, population, density, currency and which continent it is located in.
 
-## Tech stack:
+## Tech stack
 
 - This application is written mainly in vanilla javascript. 
 - The Three.js library is used for creating and interacting with the three dimensional globe. 
 - For producing smooth and fast animations such as the globe rotation I have chosen the GSAP library.  
 
-## Demo: 
+## Demo
 
 <img src="https://user-images.githubusercontent.com/74594156/163781105-88d66b25-8687-4adc-b4a6-98149e1bcf6b.gif" width="1000" alt="demo-gif">
 
