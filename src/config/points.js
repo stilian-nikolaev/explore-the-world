@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
-import countries from './countries.json'
+
+const API_URL = 'https://restcountries.com/v3.1/all'
 
 function createPoint(country, group) {
     let population = country.population;
@@ -80,5 +81,7 @@ function createPoint(country, group) {
 }
 
 export function attachPoints(group) {
-    countries.forEach(country => createPoint(country, group))
+    fetch(API_URL)
+        .then(res => res.json())
+        .then(countries => countries.forEach(country => createPoint(country, group)))
 }

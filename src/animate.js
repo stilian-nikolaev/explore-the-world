@@ -53,14 +53,15 @@ function showMoreInfo(pointData) {
     moreInfoElement.style.display = 'block';
 }
 
-//used for determining if the user hovers over a point
 const raycaster = new THREE.Raycaster();
-const pointsGroup = group.children.filter((x, i) => i !== 0);
 
 export function animate() {
     requestAnimationFrame(animate);
 
     resetValues();
+
+    //used for determining if the user hovers over a point
+    const pointsGroup = group.children.slice(1);
 
     // update the picking ray with the camera and pointer position
     raycaster.setFromCamera(mouse, camera);

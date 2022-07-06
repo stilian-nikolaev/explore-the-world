@@ -28,7 +28,7 @@ function createLight() {
 
 function createSphere(group) {
     const geometry = new THREE.SphereGeometry(6, 32, 32);
-    const texture = new THREE.TextureLoader().load('./images/earth8k.jpg')
+    const texture = new THREE.TextureLoader().load('earth8k.jpg')
     const material = new THREE.MeshStandardMaterial({ map: texture });
 
     const sphere = new THREE.Mesh(geometry, material);
