@@ -12,6 +12,7 @@ Explore data about countries all around the world with a responsive 3D earth mod
 - For producing smooth and fast animations such as the globe rotation I have chosen the GSAP library.  
 
 ## Demo
+[App url](https://explore-the-world-js.netlify.app/)
 
 <img src="https://user-images.githubusercontent.com/74594156/163781105-88d66b25-8687-4adc-b4a6-98149e1bcf6b.gif" width="1000" alt="demo-gif">
 
